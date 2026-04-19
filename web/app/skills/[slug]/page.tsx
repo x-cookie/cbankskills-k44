@@ -30,13 +30,13 @@ export default function VerticalPage({ params }: Props) {
       {/* Vertical header */}
       <div className="mb-10">
         <div className="flex items-start gap-3 mb-3 flex-wrap">
-          <h1 className="text-4xl font-bold text-text">{v.title}</h1>
+          <h1 className="font-serif text-5xl font-normal text-text" style={{ letterSpacing: "-0.02em" }}>{v.title}</h1>
           <span className="text-xs font-mono text-text-subtle bg-surface-alt border border-border px-2 py-1 rounded self-start mt-2">
             v{v.version}
           </span>
         </div>
-        <p className="text-text-muted text-xl mb-3 max-w-2xl">{v.tagline}</p>
-        <p className="text-text-muted max-w-2xl leading-relaxed mb-7">{v.description}</p>
+        <p className="text-text-muted text-xl mb-3 max-w-2xl font-light" style={{ lineHeight: 1.65 }}>{v.tagline}</p>
+        <p className="text-text-muted max-w-2xl leading-relaxed mb-7 font-light">{v.description}</p>
         <div className="flex flex-wrap gap-3">
           <a
             href={githubUrl}
