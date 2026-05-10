@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { verticals } from "@/content/verticals";
+import PageHeader from "@/components/PageHeader";
 
 type Props = { params: { slug: string } };
 
@@ -17,112 +18,139 @@ export default function VerticalPage({ params }: Props) {
   const githubUrl = `${GITHUB_BASE}/${v.slug}`;
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-16">
-      {/* Breadcrumb */}
-      <nav className="text-sm text-text-muted mb-8 flex items-center gap-2">
-        <Link href="/" className="hover:text-text transition-colors">Home</Link>
-        <span>/</span>
-        <Link href="/skills" className="hover:text-text transition-colors">Skills</Link>
-        <span>/</span>
-        <span className="text-text">{v.title}</span>
-      </nav>
+    <>
+      <PageHeader
+        eyebrow={`${v.skills.length} skills · v${v.version}`}
+        title={v.title}
+        subtitle={v.tagline}
+      />
 
-      {/* Vertical header */}
-      <div className="mb-10">
-        <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--accent)", marginBottom: 10 }}>
-          {v.skills.length} skills · v{v.version}
-        </div>
-        <div className="flex items-start gap-3 mb-3 flex-wrap">
-          <h1 className="font-serif text-5xl font-normal text-text" style={{ letterSpacing: "-0.02em" }}>{v.title}</h1>
-        </div>
-        <p className="text-text-muted text-xl mb-3 max-w-2xl font-light" style={{ lineHeight: 1.65 }}>{v.tagline}</p>
-        <p className="text-text-muted max-w-2xl leading-relaxed mb-7 font-light">{v.description}</p>
-        <div className="flex flex-wrap gap-3">
-          <a
-            href={githubUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-primary text-white font-semibold px-5 py-2.5 rounded-lg hover:bg-primary-dark transition-colors text-sm"
-          >
-            Download from GitHub →
-          </a>
-          <a
-            href="https://claude.ai/customize/skills"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="border border-border text-text-muted font-medium px-5 py-2.5 rounded-lg hover:border-primary hover:text-primary transition-colors text-sm"
-          >
-            Upload to Claude Skills
-          </a>
-          <Link href="/docs" className="text-sm text-text-muted hover:text-primary transition-colors self-center">
-            How to install →
-          </Link>
-        </div>
-      </div>
+      <div className="max-w-6xl mx-auto px-6 py-12">
+        {/* Breadcrumb */}
+        <nav style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: "var(--text-muted)", marginBottom: 32, display: "flex", alignItems: "center", gap: 8 }}>
+          <Link href="/" style={{ color: "var(--text-faint)", textDecoration: "none" }}>Home</Link>
+          <span style={{ color: "var(--text-faint)" }}>/</span>
+          <Link href="/skills" style={{ color: "var(--text-faint)", textDecoration: "none" }}>Skills</Link>
+          <span style={{ color: "var(--text-faint)" }}>/</span>
+          <span style={{ color: "var(--text-muted)" }}>{v.title}</span>
+        </nav>
 
-      {/* Install command */}
-      <div className="bg-surface-alt border border-border rounded-xl p-5 mb-12">
-        <div className="text-xs font-semibold text-text-muted uppercase tracking-wide mb-2">
-          CLI Install
-        </div>
-        <code className="font-mono text-sm text-text">{v.installCommand}</code>
-      </div>
-
-      {/* Skills grid */}
-      <div>
-        <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--accent)", marginBottom: 10 }}>
-          Included skills
-        </div>
-        <h2 className="text-xl font-semibold text-text mb-6">
-          {v.skills.length} skills{" "}
-          <span style={{ color: "var(--text-fade)" }}>in this vertical</span>
-        </h2>
-        <div className="grid sm:grid-cols-2 gap-5">
-          {v.skills.map((s) => (
-            <Link
-              key={s.slug}
-              href={`/skills/${v.slug}/${s.slug}`}
-              className="group bg-surface border border-border rounded-xl p-5 hover:border-primary hover:shadow-md hover:-translate-y-0.5 hover:bg-surface-alt transition-all duration-300 flex flex-col gap-3"
+        {/* Description + CTAs */}
+        <div style={{ marginBottom: 36 }}>
+          <p style={{ fontSize: 14, color: "rgba(13,31,20,0.55)", maxWidth: 640, lineHeight: 1.75, fontWeight: 300, marginBottom: 24 }}>
+            {v.description}
+          </p>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
+            <a
+              href={githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ background: "var(--accent)", color: "#fff", fontFamily: "var(--font-sans)", fontSize: 13, fontWeight: 600, padding: "10px 20px", borderRadius: 7, textDecoration: "none" }}
             >
-              <div className="flex items-start justify-between gap-2">
-                <h3 className="font-semibold text-text group-hover:text-primary transition-colors">
-                  {s.name}
-                </h3>
-                <code className="font-mono text-xs text-text-subtle bg-surface-alt px-2 py-0.5 rounded shrink-0">
-                  /{s.slug}
-                </code>
-              </div>
-              <p className="text-text-muted text-sm leading-relaxed flex-1 line-clamp-3">
-                {s.description}
-              </p>
-              <div className="text-xs text-text-subtle">
-                <span className="font-medium text-text-muted">Best for: </span>{s.bestFor}
-              </div>
-              <div className="text-xs text-primary font-medium opacity-0 group-hover:opacity-100 transition-opacity">
-                View full details + download →
-              </div>
+              Download from GitHub →
+            </a>
+            <a
+              href="https://claude.ai/customize/skills"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ border: "1px solid var(--b1)", color: "var(--text-muted)", fontFamily: "var(--font-sans)", fontSize: 13, fontWeight: 500, padding: "10px 20px", borderRadius: 7, textDecoration: "none", background: "transparent" }}
+              className="btn-outline"
+            >
+              Upload to Claude Skills
+            </a>
+            <Link href="/docs" style={{ fontSize: 13, color: "var(--text-muted)", alignSelf: "center", textDecoration: "none" }}>
+              How to install →
             </Link>
-          ))}
+          </div>
         </div>
-      </div>
 
-      {/* Other verticals */}
-      <div className="mt-20">
-        <h2 className="text-sm font-semibold text-text-muted uppercase tracking-wide mb-4">Other verticals</h2>
-        <div className="flex flex-wrap gap-2">
-          {verticals
-            .filter((other) => other.slug !== v.slug)
-            .map((other) => (
+        {/* Install command */}
+        <div style={{ background: "var(--s1)", border: "1px solid var(--b0)", borderRadius: 10, padding: "16px 20px", marginBottom: 48 }}>
+          <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--text-faint)", marginBottom: 8 }}>
+            CLI Install
+          </div>
+          <code style={{ fontFamily: "var(--font-mono)", fontSize: 13, color: "var(--accent)" }}>{v.installCommand}</code>
+        </div>
+
+        {/* Skills grid */}
+        <div style={{ marginBottom: 64 }}>
+          <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--accent)", marginBottom: 10 }}>
+            Included skills
+          </div>
+          <h2 style={{ fontSize: 20, fontWeight: 700, color: "var(--text)", letterSpacing: "-0.02em", marginBottom: 20 }}>
+            {v.skills.length} skills{" "}
+            <span style={{ color: "var(--text-fade)" }}>in this vertical</span>
+          </h2>
+          <div className="grid sm:grid-cols-2 gap-2">
+            {v.skills.map((s) => (
               <Link
-                key={other.slug}
-                href={`/skills/${other.slug}`}
-                className="bg-surface border border-border text-text-muted text-sm px-3 py-1.5 rounded-lg hover:border-primary hover:text-primary transition-colors"
+                key={s.slug}
+                href={`/skills/${v.slug}/${s.slug}`}
+                className="skill-card group"
+                style={{
+                  background: "var(--s1)",
+                  border: "1px solid var(--b0)",
+                  borderRadius: 12,
+                  padding: "18px 20px",
+                  textDecoration: "none",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 10,
+                }}
               >
-                {other.title}
+                <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 8 }}>
+                  <h3 style={{ fontSize: 14, fontWeight: 600, color: "var(--text)", letterSpacing: "-0.01em" }}>
+                    {s.name}
+                  </h3>
+                  <code style={{ fontFamily: "var(--font-mono)", fontSize: 9, color: "var(--accent)", background: "var(--accent-dim)", padding: "3px 7px", borderRadius: 4, flexShrink: 0 }}>
+                    /{s.slug}
+                  </code>
+                </div>
+                <p style={{ fontSize: 12, color: "rgba(13,31,20,0.45)", lineHeight: 1.6, fontWeight: 300 }}>
+                  {s.description}
+                </p>
+                <div style={{ fontSize: 11, color: "rgba(13,31,20,0.4)" }}>
+                  <span style={{ fontWeight: 500, color: "var(--text-muted)" }}>Best for: </span>{s.bestFor}
+                </div>
+                <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--accent)", opacity: 0, transition: "opacity 0.15s" }} className="group-hover:opacity-100">
+                  View full details + download →
+                </div>
               </Link>
             ))}
+          </div>
+        </div>
+
+        {/* Other verticals */}
+        <div>
+          <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--text-faint)", marginBottom: 12 }}>
+            Other verticals
+          </div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+            {verticals
+              .filter((other) => other.slug !== v.slug)
+              .map((other) => (
+                <Link
+                  key={other.slug}
+                  href={`/skills/${other.slug}`}
+                  style={{
+                    background: "var(--s1)",
+                    border: "1px solid var(--b0)",
+                    color: "var(--text-muted)",
+                    fontSize: 12,
+                    padding: "6px 14px",
+                    borderRadius: 6,
+                    textDecoration: "none",
+                    transition: "border-color 0.15s, color 0.15s",
+                    fontFamily: "var(--font-sans)",
+                  }}
+                  className="btn-outline"
+                >
+                  {other.title}
+                </Link>
+              ))}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

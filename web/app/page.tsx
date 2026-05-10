@@ -35,7 +35,7 @@ export default function HomePage() {
         className="hero-bg"
         style={{
           position: "relative",
-          minHeight: 480,
+          minHeight: "calc(100vh - 60px)",
           display: "flex",
           alignItems: "center",
           overflow: "hidden",
@@ -63,10 +63,10 @@ export default function HomePage() {
             className="anim anim-d1 hero-h1"
             style={{
               fontFamily: "var(--font-sans)",
-              fontSize: "clamp(40px, 5.5vw, 64px)",
+              fontSize: "clamp(48px, 7vw, 82px)",
               fontWeight: 800,
-              lineHeight: 1.04,
-              letterSpacing: "-0.04em",
+              lineHeight: 1.0,
+              letterSpacing: "-0.05em",
               marginBottom: 22,
             }}
           >
@@ -322,29 +322,38 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* ── THREE STEPS ─────────────────────────────────────── */}
-      <div style={{ background: "var(--s1)", borderTop: "1px solid var(--b0)", padding: "56px 48px" }}>
-        <div className="anim" style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--accent)", marginBottom: 12 }}>
+      {/* ── THREE STEPS — dark section ───────────────────────── */}
+      <div style={{ background: "var(--text)", padding: "72px 48px" }}>
+        <div className="anim" style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(46,139,87,0.7)", marginBottom: 12 }}>
           How it works
         </div>
-        <h2 className="anim anim-d1" style={{ fontFamily: "var(--font-sans)", fontSize: "clamp(24px, 3.5vw, 36px)", fontWeight: 700, letterSpacing: "-0.03em", lineHeight: 1.1, color: "var(--text)", marginBottom: 44 }}>
+        <h2 className="anim anim-d1" style={{ fontFamily: "var(--font-sans)", fontSize: "clamp(24px, 3.5vw, 36px)", fontWeight: 700, letterSpacing: "-0.03em", lineHeight: 1.1, color: "#fff", marginBottom: 56 }}>
           Three steps.{" "}
-          <span style={{ color: "var(--text-fade)" }}>No setup.</span>
+          <span style={{ color: "rgba(255,255,255,0.32)" }}>No setup.</span>
         </h2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 32 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 2 }}>
           {[
             { n: "01", title: "Choose a vertical", desc: "Browse 7 financial verticals and 55 production skills. Pick exactly what your desk needs — nothing more." },
             { n: "02", title: "Install the skill", desc: "Download the ZIP from GitHub. Upload to claude.ai/customize/skills. Active in under 2 minutes, no code required." },
             { n: "03", title: "Run the command", desc: "Type /dcf, /cim-builder, /ic-memo — or any of the 55 slash commands — in Claude and attach your files." },
           ].map((step, i) => (
-            <div key={step.n} className={`anim anim-d${i + 1}`}>
-              <div style={{ fontFamily: "var(--font-mono)", fontSize: 34, fontWeight: 800, color: "var(--accent)", lineHeight: 1, marginBottom: 16, letterSpacing: "-0.04em" }}>
+            <div
+              key={step.n}
+              className={`anim anim-d${i + 1}`}
+              style={{
+                background: "rgba(255,255,255,0.04)",
+                border: "1px solid rgba(255,255,255,0.07)",
+                borderRadius: 12,
+                padding: "28px 26px",
+              }}
+            >
+              <div style={{ fontFamily: "var(--font-mono)", fontSize: 30, fontWeight: 800, color: "var(--accent)", lineHeight: 1, marginBottom: 18, letterSpacing: "-0.04em" }}>
                 {step.n}
               </div>
-              <div style={{ fontSize: 14, fontWeight: 600, color: "var(--text)", marginBottom: 8, letterSpacing: "-0.01em" }}>
+              <div style={{ fontSize: 14, fontWeight: 600, color: "#fff", marginBottom: 10, letterSpacing: "-0.01em" }}>
                 {step.title}
               </div>
-              <div style={{ fontSize: 12, color: "rgba(13,31,20,0.45)", lineHeight: 1.7, fontWeight: 300 }}>
+              <div style={{ fontSize: 12, color: "rgba(255,255,255,0.45)", lineHeight: 1.7, fontWeight: 300 }}>
                 {step.desc}
               </div>
             </div>

@@ -1,123 +1,163 @@
 import Link from "next/link";
 import { verticals } from "@/content/verticals";
+import PageHeader from "@/components/PageHeader";
 
 const SKILLS_GITHUB = "https://github.com/spooky-may/project-jane-street/tree/main/skills";
 const totalSkills = verticals.reduce((acc, v) => acc + v.skills.length, 0);
 
 export default function SkillsPage() {
   return (
-    <div className="max-w-6xl mx-auto px-6 py-16">
-      {/* Header */}
-      <div className="mb-12">
-        <div className="flex items-start justify-between gap-4 flex-wrap">
-          <div>
-            <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--accent)", marginBottom: 10 }}>
-              {totalSkills} skills · 7 verticals
-            </div>
-            <h1 className="font-serif text-4xl font-normal text-text mb-2" style={{ letterSpacing: "-0.02em" }}>All Skills</h1>
-            <p className="text-text-muted text-lg max-w-2xl font-light">
-              {totalSkills} production-ready skills across 7 financial services verticals.
-              Each skill is a downloadable ZIP — upload to{" "}
-              <a href="https://claude.ai/customize/skills" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-                claude.ai/customize/skills
-              </a>{" "}
-              to activate it as a slash command.
-            </p>
-          </div>
+    <>
+      <PageHeader
+        eyebrow={`${totalSkills} skills · 7 verticals`}
+        title={
+          <>
+            All Skills{" "}
+            <span style={{ color: "var(--text-fade)" }}>— browse everything</span>
+          </>
+        }
+        subtitle={`${totalSkills} production-ready skills across 7 financial services verticals. Each skill is a downloadable ZIP — upload to claude.ai/customize/skills to activate it as a slash command.`}
+      />
+
+      <div className="max-w-6xl mx-auto px-6 py-14">
+        {/* GitHub link */}
+        <div className="flex justify-end mb-10">
           <a
             href={SKILLS_GITHUB}
             target="_blank"
             rel="noopener noreferrer"
-            className="shrink-0 border border-border text-text-muted text-sm font-medium px-4 py-2 rounded-lg hover:border-primary hover:text-primary transition-colors"
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: 11,
+              color: "var(--text-muted)",
+              border: "1px solid var(--b1)",
+              padding: "7px 14px",
+              borderRadius: 6,
+              textDecoration: "none",
+              transition: "border-color 0.15s, color 0.15s",
+            }}
+            className="btn-outline"
           >
             View on GitHub →
           </a>
         </div>
-      </div>
 
-      {/* Verticals with skill lists */}
-      <div className="flex flex-col gap-16">
-        {verticals.map((v) => (
-          <div key={v.slug}>
-            {/* Vertical header */}
-            <div className="flex items-end justify-between mb-6 pb-3 border-b border-border">
-              <div>
-                <div className="flex items-center gap-2 mb-1">
+        {/* Verticals with skill lists */}
+        <div className="flex flex-col gap-16">
+          {verticals.map((v) => (
+            <div key={v.slug}>
+              {/* Vertical header */}
+              <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: 20, paddingBottom: 14, borderBottom: "1px solid var(--b0)" }}>
+                <div>
+                  <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--accent)", marginBottom: 5 }}>
+                    {v.skills.length} skills · v{v.version}
+                  </div>
                   <Link
                     href={`/skills/${v.slug}`}
-                    className="text-xl font-semibold text-text hover:text-primary transition-colors"
+                    style={{ fontSize: 18, fontWeight: 700, color: "var(--text)", textDecoration: "none", letterSpacing: "-0.02em", transition: "color 0.15s" }}
+                    className="hover:text-primary"
                   >
                     {v.title}
                   </Link>
-                  <span className="text-xs text-text-subtle font-mono bg-surface-alt border border-border px-1.5 py-0.5 rounded">
-                    v{v.version}
-                  </span>
+                  <p style={{ fontSize: 12, color: "rgba(13,31,20,0.45)", marginTop: 3, fontWeight: 300 }}>{v.tagline}</p>
                 </div>
-                <p className="text-text-muted text-sm">{v.tagline}</p>
-              </div>
-              <Link
-                href={`/skills/${v.slug}`}
-                className="text-sm text-primary hover:underline font-medium shrink-0"
-              >
-                View vertical →
-              </Link>
-            </div>
-
-            {/* Skills grid */}
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {v.skills.map((s) => (
                 <Link
-                  key={s.slug}
-                  href={`/skills/${v.slug}/${s.slug}`}
-                  className="group bg-surface border border-border rounded-xl p-4 hover:border-primary hover:shadow-sm transition-all flex flex-col gap-2"
+                  href={`/skills/${v.slug}`}
+                  style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: "var(--accent)", textDecoration: "none" }}
                 >
-                  <div className="flex items-start justify-between gap-2">
-                    <h3 className="font-semibold text-text group-hover:text-primary transition-colors text-sm">
-                      {s.name}
-                    </h3>
-                    <code className="font-mono text-xs text-text-subtle bg-surface-alt px-1.5 py-0.5 rounded shrink-0">
-                      /{s.slug}
-                    </code>
-                  </div>
-                  <p className="text-text-muted text-xs leading-relaxed line-clamp-2">
-                    {s.bestFor}
-                  </p>
-                  <div className="mt-auto pt-2 text-xs text-primary font-medium opacity-0 group-hover:opacity-100 transition-opacity">
-                    View skill →
-                  </div>
+                  View vertical →
                 </Link>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
+              </div>
 
-      {/* Bottom CTA */}
-      <div className="mt-20 bg-primary-light border border-primary/20 rounded-xl p-8 text-center flex flex-col items-center gap-4">
-        <h2 className="text-xl font-semibold text-text">Ready to use these skills?</h2>
-        <p className="text-text-muted max-w-md">
-          Download any skill ZIP from GitHub and upload it to{" "}
-          <strong>claude.ai/customize/skills</strong> to activate it.
-        </p>
-        <div className="flex flex-wrap gap-3 justify-center">
-          <a
-            href={SKILLS_GITHUB}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-primary text-white font-medium px-5 py-2.5 rounded-lg hover:bg-primary-dark transition-colors text-sm"
-          >
-            Download from GitHub →
-          </a>
-          <a
-            href="https://claude.ai/customize/skills"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="border border-border bg-surface text-text-muted font-medium px-5 py-2.5 rounded-lg hover:border-primary hover:text-primary transition-colors text-sm"
-          >
-            Open Claude Skills Manager
-          </a>
+              {/* Skills grid */}
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-1">
+                {v.skills.map((s) => (
+                  <Link
+                    key={s.slug}
+                    href={`/skills/${v.slug}/${s.slug}`}
+                    className="skill-card group"
+                    style={{
+                      background: "var(--s1)",
+                      border: "1px solid var(--b0)",
+                      borderRadius: 10,
+                      padding: "16px 18px",
+                      textDecoration: "none",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 6,
+                    }}
+                  >
+                    <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 8 }}>
+                      <h3 style={{ fontSize: 13, fontWeight: 600, color: "var(--text)", letterSpacing: "-0.01em" }}>
+                        {s.name}
+                      </h3>
+                      <code style={{ fontFamily: "var(--font-mono)", fontSize: 9, color: "var(--accent)", background: "var(--accent-dim)", padding: "2px 6px", borderRadius: 3, flexShrink: 0 }}>
+                        /{s.slug}
+                      </code>
+                    </div>
+                    <p style={{ fontSize: 11, color: "rgba(13,31,20,0.45)", lineHeight: 1.55, fontWeight: 300 }}>
+                      {s.bestFor}
+                    </p>
+                    <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--accent)", marginTop: 2, opacity: 0, transition: "opacity 0.15s" }} className="group-hover:opacity-100">
+                      View skill →
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Bottom CTA */}
+        <div style={{ marginTop: 80, background: "var(--text)", borderRadius: 14, padding: "48px 40px", textAlign: "center" }}>
+          <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(46,139,87,0.7)", marginBottom: 12 }}>
+            Get started
+          </div>
+          <h2 style={{ fontSize: 24, fontWeight: 700, color: "#fff", letterSpacing: "-0.03em", marginBottom: 10 }}>
+            Ready to use these skills?
+          </h2>
+          <p style={{ fontSize: 13, color: "rgba(255,255,255,0.45)", marginBottom: 24, fontWeight: 300 }}>
+            Download any skill ZIP from GitHub and upload it to <strong style={{ color: "rgba(255,255,255,0.7)" }}>claude.ai/customize/skills</strong> to activate it.
+          </p>
+          <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
+            <a
+              href={SKILLS_GITHUB}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                background: "var(--accent)",
+                color: "#fff",
+                fontSize: 13,
+                fontWeight: 600,
+                padding: "10px 22px",
+                borderRadius: 7,
+                textDecoration: "none",
+                fontFamily: "var(--font-sans)",
+              }}
+            >
+              Download from GitHub →
+            </a>
+            <a
+              href="https://claude.ai/customize/skills"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                background: "rgba(255,255,255,0.07)",
+                color: "rgba(255,255,255,0.7)",
+                border: "1px solid rgba(255,255,255,0.12)",
+                fontSize: 13,
+                fontWeight: 500,
+                padding: "10px 22px",
+                borderRadius: 7,
+                textDecoration: "none",
+                fontFamily: "var(--font-sans)",
+              }}
+            >
+              Open Claude Skills Manager
+            </a>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

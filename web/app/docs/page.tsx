@@ -1,22 +1,23 @@
 import Link from "next/link";
 import { verticals } from "@/content/verticals";
+import PageHeader from "@/components/PageHeader";
 
 const SKILLS_URL = "https://github.com/spooky-may/project-jane-street/tree/main/skills";
 
 export default function DocsPage() {
   return (
-    <div className="max-w-4xl mx-auto px-6 py-16">
-      {/* Header */}
-      <div className="mb-12">
-        <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--accent)", marginBottom: 12 }}>
-          Quick start · No code required
-        </div>
-        <h1 className="font-serif text-5xl font-normal text-text mb-3" style={{ letterSpacing: "-0.02em" }}>Getting Started</h1>
-        <p className="text-text-muted text-xl max-w-2xl leading-relaxed font-light">
-          How to download a skill and add it to Claude in under 5 minutes.
-          No API keys. No code. No setup.
-        </p>
-      </div>
+    <>
+      <PageHeader
+        eyebrow="Quick start · No code required"
+        title={
+          <>
+            Getting Started{" "}
+            <span style={{ color: "var(--text-fade)" }}>in under 5 minutes</span>
+          </>
+        }
+        subtitle="How to download a skill and add it to Claude. No API keys. No code. No setup."
+      />
+    <div className="max-w-4xl mx-auto px-6 py-14">
 
       {/* Quick overview */}
       <div className="bg-primary-light border border-primary/20 rounded-xl p-6 mb-14">
@@ -292,5 +293,6 @@ export default function DocsPage() {
         </div>
       </div>
     </div>
+    </>
   );
 }
