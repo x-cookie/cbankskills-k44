@@ -78,18 +78,18 @@ body {
 }
 
 /* ── page transitions (View Transitions API — Chrome/Edge) ── */
-::view-transition-old(root) { animation: 180ms ease both vt-fade-out; }
-::view-transition-new(root) { animation: 420ms cubic-bezier(0.16,1,0.3,1) both vt-fade-up; }
-@keyframes vt-fade-out { to { opacity: 0; } }
-@keyframes vt-fade-up  { from { opacity: 0; transform: translateY(18px) scale(0.995); } }
+::view-transition-old(root) { animation: 160ms ease both vt-fade-out; }
+::view-transition-new(root) { animation: 500ms cubic-bezier(0.16,1,0.3,1) both vt-zoom-in; }
+@keyframes vt-fade-out { to { opacity: 0; transform: scale(1.02); } }
+@keyframes vt-zoom-in  { from { opacity: 0; transform: scale(0.97); } }
 
 /* ── page transition fallback (Firefox/Safari via template.tsx) ── */
 @keyframes pageIn {
-  from { opacity: 0; transform: translateY(18px) scale(0.995); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
+  from { opacity: 0; transform: scale(0.97); }
+  to   { opacity: 1; transform: scale(1); }
 }
 @supports not (view-transition-name: none) {
-  .page-enter { animation: pageIn 420ms cubic-bezier(0.16,1,0.3,1) forwards; }
+  .page-enter { animation: pageIn 500ms cubic-bezier(0.16,1,0.3,1) forwards; }
 }
 
 /* ── scroll fade-up animations ── */

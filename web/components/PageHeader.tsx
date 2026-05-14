@@ -47,12 +47,12 @@ export default function PageHeader({ eyebrow, title, subtitle }: Props) {
         )}
         <h1
           style={{
-            fontFamily: "var(--font-serif)",
-            fontSize: "clamp(30px, 4vw, 48px)",
-            fontWeight: 400,
-            letterSpacing: "-0.025em",
+            fontFamily: "var(--font-sans)",
+            fontSize: "clamp(28px, 4vw, 46px)",
+            fontWeight: 800,
+            letterSpacing: "-0.04em",
             color: "var(--text)",
-            lineHeight: 1.1,
+            lineHeight: 1.05,
           }}
         >
           {title}

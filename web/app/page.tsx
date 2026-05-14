@@ -39,7 +39,6 @@ export default function HomePage() {
     <>
       {/* ── HERO ─────────────────────────────────────────────── */}
       <section
-        className="hero-bg"
         style={{
           position: "relative",
           minHeight: "calc(100vh - 60px)",
@@ -47,6 +46,7 @@ export default function HomePage() {
           alignItems: "center",
           overflow: "hidden",
           padding: "80px 48px",
+          background: "#fff",
         }}
       >
         {/* Radial fade */}
@@ -131,17 +131,17 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Right: floating isometric diamonds */}
+        {/* Right: 3D isometric cubes + scattered flat tiles */}
         <div
           className="anim anim-d4 hero-diamonds"
           style={{
             position: "absolute", right: 0, top: 0, bottom: 0,
-            width: "52%",
+            width: "55%",
             pointerEvents: "none",
             zIndex: 1,
           }}
         >
-          <svg width="100%" height="100%" viewBox="0 0 520 480" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+          <svg width="100%" height="100%" viewBox="0 0 540 500" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
             <defs>
               <filter id="ds1" x="-40%" y="-40%" width="180%" height="180%">
                 <feDropShadow dx="0" dy="6" stdDeviation="10" floodColor="rgba(46,139,87,0.18)" />
@@ -153,6 +153,8 @@ export default function HomePage() {
               <linearGradient id="gleft" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stopColor="#a8d4be" /><stop offset="100%" stopColor="#7bbf9e" /></linearGradient>
               <linearGradient id="grite" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stopColor="#c0dccb" /><stop offset="100%" stopColor="#96c8ae" /></linearGradient>
             </defs>
+
+            {/* ── 3D isometric cubes (original) ────────────── */}
             <g filter="url(#ds1)" transform="translate(300,55)">
               <polygon points="65,0  130,38  65,76  0,38"  fill="url(#gtop)"  opacity="0.88" />
               <polygon points="0,38  65,76  65,120 0,82"   fill="url(#gleft)" opacity="0.88" />
@@ -178,6 +180,20 @@ export default function HomePage() {
               <polygon points="0,23  40,46  40,72  0,49"  fill="url(#gleft)" opacity="0.45" />
               <polygon points="40,46 80,23 80,49 40,72"   fill="url(#grite)" opacity="0.45" />
             </g>
+
+            {/* ── Flat small tiles scattered around cubes ─── */}
+            <polygon points="420,7 442,20 420,33 398,20"     fill="rgba(46,139,87,0.09)" stroke="rgba(46,139,87,0.18)" strokeWidth="0.6" />
+            <polygon points="482,36 498,45 482,54 466,45"    fill="rgba(46,139,87,0.08)" stroke="rgba(46,139,87,0.16)" strokeWidth="0.6" />
+            <polygon points="460,84 480,95 460,106 440,95"   fill="rgba(46,139,87,0.08)" stroke="rgba(46,139,87,0.15)" strokeWidth="0.6" />
+            <polygon points="505,155 523,165 505,175 487,165" fill="rgba(46,139,87,0.07)" stroke="rgba(46,139,87,0.14)" strokeWidth="0.5" />
+            <polygon points="305,182 319,190 305,198 291,190" fill="rgba(46,139,87,0.06)" stroke="rgba(46,139,87,0.12)" strokeWidth="0.5" />
+            <polygon points="195,236 211,245 195,254 179,245" fill="rgba(46,139,87,0.06)" stroke="rgba(46,139,87,0.11)" strokeWidth="0.5" />
+            <polygon points="445,304 465,315 445,326 425,315" fill="rgba(46,139,87,0.08)" stroke="rgba(46,139,87,0.15)" strokeWidth="0.6" />
+            <polygon points="490,382 512,395 490,408 468,395" fill="rgba(46,139,87,0.07)" stroke="rgba(46,139,87,0.13)" strokeWidth="0.5" />
+            <polygon points="295,420 313,430 295,440 277,430" fill="rgba(46,139,87,0.07)" stroke="rgba(46,139,87,0.13)" strokeWidth="0.5" />
+            <polygon points="375,402 389,410 375,418 361,410" fill="rgba(46,139,87,0.06)" stroke="rgba(46,139,87,0.11)" strokeWidth="0.5" />
+            <polygon points="165,383 177,390 165,397 153,390" fill="rgba(46,139,87,0.05)" stroke="rgba(46,139,87,0.09)" strokeWidth="0.5" />
+            <polygon points="350,303 362,310 350,317 338,310" fill="rgba(46,139,87,0.05)" stroke="rgba(46,139,87,0.09)" strokeWidth="0.5" />
           </svg>
         </div>
       </section>

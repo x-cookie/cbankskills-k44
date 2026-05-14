@@ -1,4 +1,6 @@
+"use client";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const ChevronDown = () => (
   <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
@@ -29,7 +31,15 @@ const LogoSVG = () => (
   </svg>
 );
 
+const NAV_ITEMS = [
+  { label: "Skills",    href: "/skills", activePath: "/skills" },
+  { label: "Docs",      href: "/docs",   activePath: "/docs" },
+  { label: "About",     href: "/",       activePath: "__home__" },
+];
+
 export default function Header() {
+  const pathname = usePathname();
+
   return (
     <header
       style={{
@@ -72,43 +82,40 @@ export default function Header() {
 
       {/* Nav links */}
       <nav style={{ display: "flex", gap: 2 }}>
-        {[
-          { label: "Skills",      href: "/skills" },
-          { label: "Verticals",   href: "/skills" },
-          { label: "Docs",        href: "/docs" },
-        ].map((item) => (
-          <Link
-            key={item.href + item.label}
-            href={item.href}
-            className="nav-link-item"
-            style={{
-              fontSize: 13,
-              color: "var(--text-muted)",
-              padding: "6px 12px",
-              borderRadius: 6,
-              display: "flex",
-              alignItems: "center",
-              gap: 4,
-              textDecoration: "none",
-            }}
-          >
-            {item.label}
-            <span style={{ opacity: 0.5 }}><ChevronDown /></span>
-          </Link>
-        ))}
-        <Link
-          href="/docs"
-          className="nav-link-item"
-          style={{
-            fontSize: 13,
-            color: "var(--text-muted)",
-            padding: "6px 12px",
-            borderRadius: 6,
-            textDecoration: "none",
-          }}
-        >
-          About
-        </Link>
+        {NAV_ITEMS.map((item) => {
+          const isActive =
+            item.activePath === "/skills"
+              ? pathname.startsWith("/skills")
+              : item.activePath === "/docs"
+              ? pathname.startsWith("/docs")
+              : false;
+
+          return (
+            <Link
+              key={item.href + item.label}
+              href={item.href}
+              className="nav-link-item"
+              style={{
+                fontSize: 13,
+                color: isActive ? "var(--accent)" : "var(--text-muted)",
+                background: isActive ? "var(--s2)" : "transparent",
+                padding: "6px 12px",
+                borderRadius: 6,
+                display: "flex",
+                alignItems: "center",
+                gap: 4,
+                textDecoration: "none",
+                fontWeight: isActive ? 500 : 400,
+                transition: "color 0.15s, background 0.15s",
+              }}
+            >
+              {item.label}
+              {item.label !== "About" && (
+                <span style={{ opacity: isActive ? 0.7 : 0.5 }}><ChevronDown /></span>
+              )}
+            </Link>
+          );
+        })}
       </nav>
 
       {/* CTAs */}
