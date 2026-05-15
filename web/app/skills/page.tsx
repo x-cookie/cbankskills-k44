@@ -54,7 +54,7 @@ export default function SkillsPage() {
                   </div>
                   <Link
                     href={`/skills/${v.slug}`}
-                    style={{ fontSize: 18, fontWeight: 700, color: "var(--text)", textDecoration: "none", letterSpacing: "-0.02em", transition: "color 0.15s" }}
+                    style={{ fontSize: 20, fontWeight: 800, color: "var(--text)", textDecoration: "none", letterSpacing: "-0.04em", transition: "color 0.15s" }}
                     className="hover:text-primary"
                   >
                     {v.title}
@@ -70,7 +70,7 @@ export default function SkillsPage() {
               </div>
 
               {/* Skills grid */}
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-1">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {v.skills.map((s) => (
                   <Link
                     key={s.slug}

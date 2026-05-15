@@ -44,7 +44,7 @@ export default function DocsPage() {
 
       {/* Step-by-step */}
       <section id="install" className="mb-16">
-        <h2 className="font-serif text-3xl font-normal text-text mb-8" style={{ letterSpacing: "-0.02em" }}>
+        <h2 className="font-sans text-2xl font-extrabold text-text mb-8" style={{ letterSpacing: "-0.04em" }}>
           Install a skill —{" "}
           <span style={{ color: "var(--text-fade)" }}>step by step</span>
         </h2>
@@ -169,7 +169,7 @@ export default function DocsPage() {
                 available skills, select yours, and start your request. Attach any relevant files
                 (Excel models, PDFs, transcripts) directly in the message.
               </p>
-              <div className="bg-[#1a1a2e] border border-[#2a2a4a] rounded-xl p-4">
+              <div className="rounded-xl p-4" style={{ background: "#0D1F14", border: "1px solid rgba(46,139,87,0.18)" }}>
                 <div className="font-mono text-sm space-y-1.5">
                   <p className="text-white/40"># Example — using the DCF skill</p>
                   <p>
@@ -188,7 +188,7 @@ export default function DocsPage() {
 
       {/* Install order */}
       <section className="mb-16">
-        <h2 className="font-serif text-3xl font-normal text-text mb-4" style={{ letterSpacing: "-0.02em" }}>
+        <h2 className="font-sans text-2xl font-extrabold text-text mb-4" style={{ letterSpacing: "-0.04em" }}>
           Recommended{" "}
           <span style={{ color: "var(--text-fade)" }}>install order</span>
         </h2>
@@ -228,7 +228,7 @@ export default function DocsPage() {
 
       {/* FAQ */}
       <section className="mb-16">
-        <h2 className="font-serif text-3xl font-normal text-text mb-8" style={{ letterSpacing: "-0.02em" }}>FAQ</h2>
+        <h2 className="font-sans text-2xl font-extrabold text-text mb-8" style={{ letterSpacing: "-0.04em" }}>FAQ</h2>
         <div className="flex flex-col gap-6">
           {[
             {

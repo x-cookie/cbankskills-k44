@@ -94,19 +94,15 @@ export default function Header() {
             <Link
               key={item.href + item.label}
               href={item.href}
-              className="nav-link-item"
+              className={`nav-link-item${isActive ? " nav-link-active" : ""}`}
               style={{
                 fontSize: 13,
-                color: isActive ? "var(--accent)" : "var(--text-muted)",
-                background: isActive ? "var(--s2)" : "transparent",
                 padding: "6px 12px",
                 borderRadius: 6,
                 display: "flex",
                 alignItems: "center",
                 gap: 4,
                 textDecoration: "none",
-                fontWeight: isActive ? 500 : 400,
-                transition: "color 0.15s, background 0.15s",
               }}
             >
               {item.label}

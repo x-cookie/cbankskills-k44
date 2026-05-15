@@ -16,7 +16,7 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  title: "CN Finance — Claude AI Skills for Financial Services",
+  title: "CBANK — Claude AI Skills for Financial Services",
   description:
     "Production-ready Claude AI skills for investment banking, equity research, private equity, fund administration, and wealth management.",
 };

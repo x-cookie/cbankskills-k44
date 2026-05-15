@@ -48,9 +48,12 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* ── nav link hover ── */
-.nav-link-item { transition: color 0.15s, background 0.15s; }
+/* ── nav link hover + active state ── */
+.nav-link-item { color: var(--text-muted); transition: color 0.15s, background 0.15s; }
 .nav-link-item:hover { color: var(--text) !important; background: var(--s1) !important; }
+/* active beats hover via higher specificity (.nav-link-item.nav-link-active = 0,2,0 vs :hover = 0,2,0 → cascade wins since declared after) */
+.nav-link-item.nav-link-active { color: var(--accent) !important; background: var(--s2) !important; font-weight: 500 !important; }
+.nav-link-item.nav-link-active:hover { color: var(--accent) !important; background: var(--s2) !important; }
 
 /* ── outline button hover ── */
 .btn-outline { transition: background 0.15s, border-color 0.15s; }
