@@ -13,6 +13,14 @@ export function generateStaticParams() {
   );
 }
 
+const DiamondDivider = () => (
+  <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "4px 0" }}>
+    <div style={{ flex: 1, height: 1, background: "var(--b0)" }} />
+    <span style={{ fontFamily: "var(--font-mono)", fontSize: 8, color: "var(--accent)", opacity: 0.4 }}>◆</span>
+    <div style={{ flex: 1, height: 1, background: "var(--b0)" }} />
+  </div>
+);
+
 export default function SkillPage({ params }: Props) {
   const v = verticals.find((v) => v.slug === params.slug);
   if (!v) notFound();
@@ -32,7 +40,7 @@ export default function SkillPage({ params }: Props) {
 
       <div className="max-w-6xl mx-auto px-6 py-12">
         {/* Breadcrumb */}
-        <nav style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: "var(--text-muted)", marginBottom: 32, display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+        <nav style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: "var(--text-muted)", marginBottom: 36, display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
           <Link href="/" style={{ color: "var(--text-faint)", textDecoration: "none" }}>Home</Link>
           <span style={{ color: "var(--text-faint)" }}>/</span>
           <Link href="/skills" style={{ color: "var(--text-faint)", textDecoration: "none" }}>Skills</Link>
@@ -48,32 +56,35 @@ export default function SkillPage({ params }: Props) {
 
             {/* What it produces */}
             <section>
-              <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--accent)", marginBottom: 10 }}>
-                Output
+              <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--accent)", marginBottom: 8 }}>
+                ◆ Output
               </div>
-              <h2 style={{ fontSize: 15, fontWeight: 600, color: "var(--text)", marginBottom: 12, letterSpacing: "-0.01em" }}>
+              <h2 style={{ fontSize: 20, fontWeight: 800, color: "var(--text)", marginBottom: 14, letterSpacing: "-0.04em" }}>
                 What it produces
               </h2>
-              <div style={{ background: "var(--s1)", border: "1px solid var(--b0)", borderRadius: 10, padding: "16px 20px" }}>
-                <p style={{ fontSize: 13, color: "rgba(13,31,20,0.55)", lineHeight: 1.7, fontWeight: 300 }}>{s.outputFormat}</p>
+              <div style={{ background: "var(--s1)", border: "1px solid var(--b0)", borderLeft: "2px solid var(--accent-mid)", borderRadius: 10, padding: "18px 22px" }}>
+                <p style={{ fontSize: 13, color: "rgba(13,31,20,0.60)", lineHeight: 1.75, fontWeight: 300 }}>{s.outputFormat}</p>
               </div>
             </section>
 
             {/* Best for */}
             <section>
-              <h2 style={{ fontSize: 15, fontWeight: 600, color: "var(--text)", marginBottom: 12, letterSpacing: "-0.01em" }}>
+              <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--accent)", marginBottom: 8 }}>
+                ◆ Audience
+              </div>
+              <h2 style={{ fontSize: 20, fontWeight: 800, color: "var(--text)", marginBottom: 14, letterSpacing: "-0.04em" }}>
                 Best for
               </h2>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                 {s.bestFor.split(",").map((item) => (
                   <span
                     key={item}
                     style={{
                       background: "var(--s2)",
-                      border: "1px solid var(--b0)",
+                      border: "1px solid var(--accent-mid)",
                       color: "var(--text-muted)",
                       fontSize: 11,
-                      padding: "5px 12px",
+                      padding: "5px 14px",
                       borderRadius: 20,
                       fontFamily: "var(--font-sans)",
                     }}
@@ -86,45 +97,48 @@ export default function SkillPage({ params }: Props) {
 
             {/* Example triggers */}
             <section>
-              <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--accent)", marginBottom: 10 }}>
-                Example prompts
+              <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--accent)", marginBottom: 8 }}>
+                ◆ Example prompts
               </div>
-              <h2 style={{ fontSize: 15, fontWeight: 600, color: "var(--text)", marginBottom: 6, letterSpacing: "-0.01em" }}>
+              <h2 style={{ fontSize: 20, fontWeight: 800, color: "var(--text)", marginBottom: 6, letterSpacing: "-0.04em" }}>
                 Use it like this
               </h2>
-              <p style={{ fontSize: 12, color: "rgba(13,31,20,0.45)", marginBottom: 14, fontWeight: 300 }}>
+              <p style={{ fontSize: 12, color: "rgba(13,31,20,0.45)", marginBottom: 16, fontWeight: 300 }}>
                 After uploading this skill to Claude, type in the chat:
               </p>
-              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                 {s.triggerPhrases.map((phrase, i) => (
                   <div
                     key={i}
                     style={{
                       background: "#0D1F14",
-                      border: "1px solid rgba(46,139,87,0.15)",
+                      border: "1px solid rgba(46,139,87,0.18)",
+                      borderLeft: "2px solid rgba(46,139,87,0.45)",
                       borderRadius: 8,
-                      padding: "12px 16px",
+                      padding: "13px 18px",
                       fontFamily: "var(--font-mono)",
                       fontSize: 12,
                       color: "#fff",
                     }}
                   >
-                    <span style={{ color: "var(--accent)", marginRight: 8 }}>›</span>
+                    <span style={{ color: "var(--accent)", marginRight: 10 }}>›</span>
                     {phrase}
                   </div>
                 ))}
               </div>
             </section>
 
+            <DiamondDivider />
+
             {/* How to use */}
             <section>
-              <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--accent)", marginBottom: 10 }}>
-                Installation
+              <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--accent)", marginBottom: 8 }}>
+                ◆ Installation
               </div>
-              <h2 style={{ fontSize: 15, fontWeight: 600, color: "var(--text)", marginBottom: 20, letterSpacing: "-0.01em" }}>
+              <h2 style={{ fontSize: 20, fontWeight: 800, color: "var(--text)", marginBottom: 22, letterSpacing: "-0.04em" }}>
                 How to use this skill
               </h2>
-              <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
                 {[
                   {
                     n: "1",
@@ -170,31 +184,36 @@ export default function SkillPage({ params }: Props) {
                     ),
                   },
                 ].map((step) => (
-                  <div key={step.n} style={{ display: "flex", gap: 14 }}>
+                  <div key={step.n} style={{ display: "flex", gap: 16 }}>
                     <div style={{
-                      width: 28, height: 28, borderRadius: "50%",
+                      width: 30, height: 30, borderRadius: "50%",
                       background: "var(--accent-dim)", color: "var(--accent)",
-                      fontSize: 12, fontWeight: 700, fontFamily: "var(--font-mono)",
+                      fontSize: 12, fontWeight: 800, fontFamily: "var(--font-mono)",
                       display: "flex", alignItems: "center", justifyContent: "center",
-                      flexShrink: 0, marginTop: 2,
+                      flexShrink: 0, marginTop: 1, border: "1px solid var(--accent-mid)",
                     }}>
                       {step.n}
                     </div>
                     <div>
-                      <div style={{ fontSize: 13, fontWeight: 600, color: "var(--text)", marginBottom: 4, letterSpacing: "-0.01em" }}>{step.title}</div>
-                      <p style={{ fontSize: 12, color: "rgba(13,31,20,0.50)", lineHeight: 1.7, fontWeight: 300 }}>{step.desc}</p>
+                      <div style={{ fontSize: 14, fontWeight: 700, color: "var(--text)", marginBottom: 5, letterSpacing: "-0.02em" }}>{step.title}</div>
+                      <p style={{ fontSize: 12, color: "rgba(13,31,20,0.50)", lineHeight: 1.75, fontWeight: 300 }}>{step.desc}</p>
                     </div>
                   </div>
                 ))}
               </div>
             </section>
 
+            <DiamondDivider />
+
             {/* Other skills in vertical */}
             <section>
-              <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--text-faint)", marginBottom: 12 }}>
+              <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--accent)", marginBottom: 8 }}>
+                ◆ Related
+              </div>
+              <div style={{ fontFamily: "var(--font-mono)", fontSize: 9, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--text-faint)", marginBottom: 14 }}>
                 More skills in {v.title}
               </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                 {v.skills
                   .filter((other) => other.slug !== s.slug)
                   .map((other) => (
@@ -205,15 +224,15 @@ export default function SkillPage({ params }: Props) {
                       style={{
                         display: "flex", alignItems: "center", justifyContent: "space-between",
                         background: "var(--s1)", border: "1px solid var(--b0)",
-                        borderRadius: 8, padding: "10px 14px",
+                        borderRadius: 8, padding: "11px 16px",
                         textDecoration: "none",
                       }}
                     >
-                      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                        <code style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--accent)", background: "var(--accent-dim)", padding: "2px 6px", borderRadius: 3 }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                        <code style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "var(--accent)", background: "var(--accent-dim)", padding: "2px 7px", borderRadius: 3 }}>
                           /{other.slug}
                         </code>
-                        <span style={{ fontSize: 13, color: "var(--text-muted)" }}>
+                        <span style={{ fontSize: 13, color: "var(--text-muted)", letterSpacing: "-0.01em" }}>
                           {other.name}
                         </span>
                       </div>
@@ -227,16 +246,19 @@ export default function SkillPage({ params }: Props) {
           {/* Sidebar */}
           <aside style={{ display: "flex", flexDirection: "column", gap: 14 }}>
             {/* Primary CTA */}
-            <div style={{
-              background: "var(--text)",
-              borderRadius: 14,
-              padding: 22,
-              display: "flex",
-              flexDirection: "column",
-              gap: 16,
-              position: "sticky",
-              top: 80,
-            }}>
+            <div
+              className="bg-diamond-dark"
+              style={{
+                background: "var(--text)",
+                borderRadius: 14,
+                padding: 22,
+                display: "flex",
+                flexDirection: "column",
+                gap: 16,
+                position: "sticky",
+                top: 80,
+              }}
+            >
               <div>
                 <div style={{
                   fontFamily: "var(--font-mono)",
@@ -246,15 +268,16 @@ export default function SkillPage({ params }: Props) {
                   color: "rgba(46,139,87,0.7)",
                   marginBottom: 10,
                 }}>
-                  Get this skill
+                  ◆ Get this skill
                 </div>
                 <div style={{
-                  fontFamily: "var(--font-serif)",
-                  fontSize: 18,
-                  fontWeight: 400,
+                  fontFamily: "var(--font-sans)",
+                  fontSize: 16,
+                  fontWeight: 800,
                   color: "#fff",
-                  marginBottom: 4,
+                  marginBottom: 5,
                   lineHeight: 1.25,
+                  letterSpacing: "-0.04em",
                 }}>
                   {s.name}
                 </div>
@@ -330,7 +353,7 @@ export default function SkillPage({ params }: Props) {
                 className="group"
               >
                 <div>
-                  <div style={{ fontSize: 13, fontWeight: 600, color: "var(--text)", letterSpacing: "-0.01em" }}>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: "var(--text)", letterSpacing: "-0.02em" }}>
                     {v.title}
                   </div>
                   <div style={{ fontSize: 11, color: "var(--text-faint)", marginTop: 2 }}>
