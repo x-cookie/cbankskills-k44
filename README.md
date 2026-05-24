@@ -71,7 +71,8 @@ graph LR
         SKILLS["/skills Directory"]
         SLUG["/skills/[slug] Vertical"]
         SKILL["/skills/[slug]/[skill] Detail"]
-        DOCS["/docs Install guide"]
+        ENT["/enterprise Decision-maker page"]
+        DOCS["/docs Install guide + sidebar"]
     end
 
     FA --> ZIP
@@ -149,7 +150,7 @@ graph TD
 | Showcase framework | Next.js 14 (App Router, SSG) |
 | Language | TypeScript (strict) |
 | Styling | Tailwind CSS + CSS custom properties |
-| Fonts | Geist Sans + Geist Mono via `next/font` |
+| Fonts | Inter + Geist Mono via `next/font` |
 | Smooth scroll | Lenis 1.3.23 |
 | Page transitions | View Transitions API + CSS fallback |
 | Package manager | pnpm |
@@ -222,8 +223,10 @@ cbankskills-k31/
     │   │       ├── page.tsx        ← Vertical detail page
     │   │       └── [skill]/
     │   │           └── page.tsx    ← Individual skill page
+    │   ├── enterprise/
+    │   │   └── page.tsx            ← Decision-maker landing page
     │   └── docs/
-    │       └── page.tsx            ← Install guide + FAQ
+    │       └── page.tsx            ← Install guide + sidebar nav
     ├── components/
     │   ├── layout/
     │   │   ├── Header.tsx          ← Sticky nav with active state
