@@ -48,8 +48,8 @@ export default function SkillPage({ params }: Props) {
                 {v.title}
               </Link>
             </div>
-            <h1 className="text-4xl font-bold text-text mb-3">{s.name}</h1>
-            <p className="text-text-muted text-lg leading-relaxed max-w-2xl">{s.description}</p>
+            <h1 className="font-serif text-5xl font-normal text-text mb-3" style={{ letterSpacing: "-0.02em" }}>{s.name}</h1>
+            <p className="text-text-muted text-lg leading-relaxed max-w-2xl font-light">{s.description}</p>
           </div>
 
           {/* What it produces */}
