@@ -7,136 +7,212 @@ const TILE_H = 28
 const DX = 18
 const DY = 10
 
-const COLORS = ['#F472B6', '#60A5FA', '#FBBF24'] // pink, blue, yellow
+const COLORS = ['#F472B6', '#60A5FA', '#FBBF24'] as const
+type Color = (typeof COLORS)[number]
 
-const STEP_MS   = 175  // ms per tile step
-const PAUSE_MS  = 3200 // ms between collision events
-const BURST_MS  = 600  // collision burst duration
+const STEP_MS  = 215   // ms per grid step
+const MERGE_MS = 4000  // merged tile hold duration
+const PAUSE_MS = 900   // gap after merged fade-out before next event
+const ARRIVE_MS = 180  // tile fade-in animation duration
+const TRAIL    = 2     // trail tiles behind head
 
-interface Traveler {
-  path: { x: number; y: number }[]
-  step: number
-  color: string
-}
-
-interface Collision {
-  id: number
-  x: number
-  y: number
-  color1: string
-  color2: string
-}
+interface GridPt { r: number; c: number; x: number; y: number }
+interface TravelerState { id: number; path: GridPt[]; step: number; color: Color }
+interface MergedTile    { id: number; x: number; y: number; c1: Color; c2: Color }
 
 let uid = 0
 
-function buildGrid(cols: number, rows: number) {
-  const pts: { x: number; y: number }[][] = []
-  for (let r = 0; r <= rows + 1; r++) {
-    const row: { x: number; y: number }[] = []
-    // Layer 1 only for traveler grid (simpler, consistent spacing)
-    for (let c = 0; c <= cols + 1; c++) {
-      row.push({ x: 26 + c * TILE_W, y: 14 + r * TILE_H })
-    }
-    pts.push(row)
-  }
-  return pts
+function buildGrid(cols: number, rows: number): GridPt[][] {
+  return Array.from({ length: rows + 2 }, (_, r) =>
+    Array.from({ length: cols + 2 }, (_, c) => ({
+      r, c,
+      x: 26 + c * TILE_W,
+      y: 14 + r * TILE_H,
+    }))
+  )
 }
 
-function pickTwoColors(): [string, string] {
+function pickTwo(): [Color, Color] {
   const i = Math.floor(Math.random() * COLORS.length)
-  let j = Math.floor(Math.random() * (COLORS.length - 1))
+  let j  = Math.floor(Math.random() * (COLORS.length - 1))
   if (j >= i) j++
   return [COLORS[i], COLORS[j]]
 }
 
-export default function HeroPingOverlay() {
-  const [grid, setGrid] = useState<{ x: number; y: number }[][]>([])
-  const [travelers, setTravelers] = useState<Traveler[]>([])
-  const [collisions, setCollisions] = useState<Collision[]>([])
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+/**
+ * Wandering path from (sr,sc) → (er,ec) in exactly `budget` steps.
+ * The traveler mostly drifts in the right direction but wobbles rows,
+ * occasionally backtracks a column, and converges firmly in the final
+ * quarter — giving the feel of accidentally ending up at the meeting point.
+ */
+function wanderPath(
+  grid: GridPt[][],
+  sr: number, sc: number,
+  er: number, ec: number,
+  budget: number
+): GridPt[] {
+  const maxR = grid.length - 1
+  const maxC = grid[0].length - 1
+  const path: GridPt[] = [grid[sr][sc]]
+  let r = sr, c = sc
 
+  for (let i = 0; i < budget; i++) {
+    const remaining = budget - i        // steps left (including this one)
+    const dr = er - r
+    const dc = ec - c
+    const dist = Math.abs(dr) + Math.abs(dc)
+
+    // Pad with target if already there
+    if (dist === 0) { path.push(grid[er][ec]); continue }
+
+    const mustDirect = dist >= remaining
+    let nr = r, nc = c
+
+    if (mustDirect) {
+      // Take the most efficient step possible
+      if (Math.abs(dc) >= Math.abs(dr)) {
+        nc = c + Math.sign(dc)
+        if (dr !== 0 && remaining > 1) nr = r + Math.sign(dr)
+      } else {
+        nr = r + Math.sign(dr)
+        if (dc !== 0) nc = c + Math.sign(dc)
+      }
+    } else {
+      const slack = remaining - dist
+      const roll  = Math.random()
+
+      if (roll < 0.40) {
+        // Primary axis progress, optional row tag-along
+        if (Math.abs(dc) >= Math.abs(dr)) {
+          nc = c + Math.sign(dc)
+          if (dr !== 0 && Math.random() < 0.45) nr = r + Math.sign(dr)
+        } else {
+          nr = r + Math.sign(dr)
+          if (dc !== 0 && Math.random() < 0.45) nc = c + Math.sign(dc)
+        }
+      } else if (roll < 0.58) {
+        // Row wander — lateral drift, slight col nudge
+        nr = r + (Math.random() < 0.5 ? 1 : -1)
+        if (dc !== 0 && Math.random() < 0.30) nc = c + Math.sign(dc)
+      } else if (roll < 0.74) {
+        // Diagonal drift: col progress + row wobble
+        if (dc !== 0) nc = c + Math.sign(dc)
+        nr = r + (Math.random() < 0.5 ? 1 : -1)
+      } else if (slack > 3 && roll < 0.87) {
+        // Brief col backtrack (indecision moment) + row progress
+        if (dc !== 0) nc = c - Math.sign(dc)
+        nr   = r + (dr !== 0 ? Math.sign(dr) : (Math.random() < 0.5 ? 1 : -1))
+      } else {
+        // Pure row wander
+        nr = r + (Math.random() < 0.5 ? 1 : -1)
+      }
+    }
+
+    nr = Math.max(0, Math.min(maxR, nr))
+    nc = Math.max(0, Math.min(maxC, nc))
+    r = nr; c = nc
+    path.push(grid[r][c])
+  }
+
+  // Guarantee path ends at target
+  path.push(grid[er][ec])
+  return path
+}
+
+export default function HeroPingOverlay() {
+  const [grid,     setGrid]     = useState<GridPt[][]>([])
+  const [travelers, setTravelers] = useState<TravelerState[]>([])
+  const [merged,    setMerged]   = useState<MergedTile | null>(null)
+
+  const alive   = useRef(true)
+  const stepIv  = useRef<ReturnType<typeof setInterval> | null>(null)
+  const schedT  = useRef<ReturnType<typeof setTimeout>  | null>(null)
+
+  // Build grid from viewport dimensions once on mount
   useEffect(() => {
-    const cols = Math.ceil(window.innerWidth / TILE_W) + 1
+    const cols = Math.ceil(window.innerWidth  / TILE_W) + 1
     const rows = Math.ceil((window.innerHeight - 60) / TILE_H) + 1
     setGrid(buildGrid(cols, rows))
   }, [])
 
   useEffect(() => {
-    if (grid.length === 0 || grid[0].length === 0) return
+    if (!grid.length || !grid[0].length) return
+    alive.current = true
+
+    const later = (fn: () => void, ms: number) => {
+      schedT.current = setTimeout(fn, ms)
+    }
 
     const spawnEvent = () => {
+      if (!alive.current) return
       const rows = grid.length
       const cols = grid[0].length
 
-      // Pick a row in the middle vertical band
-      const row = Math.floor(rows * 0.15 + Math.random() * rows * 0.65)
+      // Keep travelers in right half — green cubes live at x≈165–510 (left half)
+      const lo = Math.floor(cols * 0.52)
+      const hi = Math.floor(cols * 0.90)
+      if (lo + 10 > hi) return
 
-      // Right-bias: start column range in right 55–90% of viewport columns
-      const rightStart = Math.floor(cols * 0.55)
-      const rightEnd   = Math.floor(cols * 0.90)
-      if (rightStart + 6 >= rightEnd) return
+      const meetR = Math.floor(rows * 0.12 + Math.random() * rows * 0.60)
+      const meetC = lo + 3 + Math.floor(Math.random() * (hi - lo - 5))
+      const spread = 4 + Math.floor(Math.random() * 3)          // 4–6 tiles each side
+      const budget = spread + 5 + Math.floor(Math.random() * 5) // extra steps for wandering
 
-      // Meet column: random point within the right zone
-      const meetCol = rightStart + 2 + Math.floor(Math.random() * (rightEnd - rightStart - 4))
-      const travel  = 3 + Math.floor(Math.random() * 3) // 3–5 tiles each side
+      // Start rows can differ from meetR (±0–3 rows) — paths converge diagonally
+      const clampR = (v: number) => Math.max(0, Math.min(rows - 1, v))
+      const startRA = clampR(meetR + Math.round((Math.random() - 0.5) * 5))
+      const startRB = clampR(meetR + Math.round((Math.random() - 0.5) * 5))
+      const startCA = Math.max(0,        meetC - spread)
+      const startCB = Math.min(cols - 1, meetC + spread)
 
-      const colLeft  = Math.max(0, meetCol - travel)
-      const colRight = Math.min(cols - 1, meetCol + travel)
+      const [c1, c2] = pickTwo()
+      const pathA = wanderPath(grid, startRA, startCA, meetR, meetC, budget)
+      const pathB = wanderPath(grid, startRB, startCB, meetR, meetC, budget)
 
-      if (colLeft >= meetCol || colRight <= meetCol) return
+      const idA = uid++
+      const idB = uid++
+      setTravelers([
+        { id: idA, path: pathA, step: 0, color: c1 },
+        { id: idB, path: pathB, step: 0, color: c2 },
+      ])
 
-      const [c1, c2] = pickTwoColors()
-
-      // Build paths: left traveler walks right, right traveler walks left
-      const pathL: { x: number; y: number }[] = []
-      for (let c = colLeft; c <= meetCol; c++) pathL.push(grid[row][c])
-
-      const pathR: { x: number; y: number }[] = []
-      for (let c = colRight; c >= meetCol; c--) pathR.push(grid[row][c])
-
-      const tL: Traveler = { path: pathL, step: 0, color: c1 }
-      const tR: Traveler = { path: pathR, step: 0, color: c2 }
-
-      setTravelers([tL, tR])
-
-      // Step both travelers forward every STEP_MS
       let step = 0
-      const maxSteps = Math.max(pathL.length, pathR.length) - 1
+      const maxStep = Math.max(pathA.length, pathB.length) - 1
 
-      intervalRef.current = setInterval(() => {
+      stepIv.current = setInterval(() => {
+        if (!alive.current) { clearInterval(stepIv.current!); return }
         step++
-        if (step >= maxSteps) {
-          clearInterval(intervalRef.current!)
-          intervalRef.current = null
 
-          // Collision burst at meet point
-          const meet = grid[row][meetCol]
-          const collId = uid++
-          setCollisions(prev => [...prev, { id: collId, x: meet.x, y: meet.y, color1: c1, color2: c2 }])
+        if (step >= maxStep) {
+          clearInterval(stepIv.current!)
+          stepIv.current = null
           setTravelers([])
 
-          setTimeout(() => {
-            setCollisions(prev => prev.filter(c => c.id !== collId))
-          }, BURST_MS)
+          // Show merged tile
+          const mt  = grid[meetR][meetC]
+          const mid = uid++
+          setMerged({ id: mid, x: mt.x, y: mt.y, c1, c2 })
 
-          // Schedule next event
-          timerRef.current = setTimeout(spawnEvent, PAUSE_MS)
+          later(() => {
+            if (!alive.current) return
+            setMerged(null)
+            later(spawnEvent, PAUSE_MS)
+          }, MERGE_MS)
         } else {
           setTravelers([
-            { path: pathL, step: Math.min(step, pathL.length - 1), color: c1 },
-            { path: pathR, step: Math.min(step, pathR.length - 1), color: c2 },
+            { id: idA, path: pathA, step: Math.min(step, pathA.length - 1), color: c1 },
+            { id: idB, path: pathB, step: Math.min(step, pathB.length - 1), color: c2 },
           ])
         }
       }, STEP_MS)
     }
 
-    // First spawn with short delay
-    timerRef.current = setTimeout(spawnEvent, 600)
+    later(spawnEvent, 700)
 
     return () => {
-      if (timerRef.current) clearTimeout(timerRef.current)
-      if (intervalRef.current) clearInterval(intervalRef.current)
+      alive.current = false
+      if (stepIv.current) clearInterval(stepIv.current)
+      if (schedT.current)  clearTimeout(schedT.current)
     }
   }, [grid])
 
@@ -144,58 +220,83 @@ export default function HeroPingOverlay() {
     <svg
       aria-hidden="true"
       style={{
-        position: 'absolute',
-        inset: 0,
-        width: '100%',
-        height: '100%',
+        position: 'absolute', inset: 0,
+        width: '100%', height: '100%',
         pointerEvents: 'none',
         overflow: 'visible',
         zIndex: 0,
       }}
     >
-      {/* Travelers with trail */}
-      {travelers.map((t, ti) => (
+      {/* Travelers: head fades in, trail fades with CSS transition */}
+      {travelers.map(t =>
         t.path.slice(0, t.step + 1).map((pt, pi) => {
-          const isHead  = pi === t.step
-          const trailAge = t.step - pi // 0=head, 1=first trail, 2=older
-          const opacity = isHead ? 0.72 : trailAge === 1 ? 0.28 : 0.10
-          if (trailAge > 2) return null
+          const age    = t.step - pi
+          if (age > TRAIL) return null
+          const isHead = age === 0
+          const op     = isHead ? 0.80 : age === 1 ? 0.32 : 0.12
           return (
-            <g key={`t${ti}-p${pi}`} transform={`translate(${pt.x},${pt.y})`}>
+            <g key={`${t.id}-${pi}`} transform={`translate(${pt.x},${pt.y})`}>
               <polygon
                 points={`0,${-DY} ${DX},0 0,${DY} ${-DX},0`}
                 fill={t.color}
                 stroke={isHead ? t.color : 'none'}
-                strokeWidth={isHead ? 0.8 : 0}
-                opacity={opacity}
+                strokeWidth={isHead ? 0.9 : 0}
+                style={{
+                  opacity: op,
+                  // transition handles trail opacity decay; animation overrides it for head arrival
+                  transition: 'opacity 140ms ease',
+                  animation:  isHead ? `tileArrive ${ARRIVE_MS}ms ease-out` : 'none',
+                }}
               />
             </g>
           )
         })
-      ))}
+      )}
 
-      {/* Collision bursts */}
-      {collisions.map(col => (
-        <g key={col.id} transform={`translate(${col.x},${col.y})`}>
+      {/* Merged tile — bursts in, glows for 4 s, fades out */}
+      {merged && (
+        <g key={merged.id} transform={`translate(${merged.x},${merged.y})`}>
+          {/* Outer halo */}
           <polygon
             points={`0,${-DY * 1.8} ${DX * 1.8},0 0,${DY * 1.8} ${-DX * 1.8},0`}
-            fill={col.color1}
-            style={{ animation: `collisionBurst ${BURST_MS}ms ease-out forwards` }}
+            fill={merged.c1}
+            style={{ animation: `mergedOuter ${MERGE_MS}ms ease-in-out forwards` }}
           />
+          {/* Inner core */}
           <polygon
-            points={`0,${-DY * 1.1} ${DX * 1.1},0 0,${DY * 1.1} ${-DX * 1.1},0`}
-            fill={col.color2}
-            style={{ animation: `collisionBurst ${BURST_MS}ms ease-out ${BURST_MS * 0.12}ms forwards` }}
+            points={`0,${-DY} ${DX},0 0,${DY} ${-DX},0`}
+            fill={merged.c2}
+            style={{ animation: `mergedInner ${MERGE_MS}ms ease-in-out forwards` }}
           />
         </g>
-      ))}
+      )}
 
       <style>{`
-        @keyframes collisionBurst {
-          0%   { opacity: 0;    transform: scale(0.5); }
-          18%  { opacity: 0.85; transform: scale(1.5); }
-          55%  { opacity: 0.45; transform: scale(1.1); }
-          100% { opacity: 0;    transform: scale(0.7); }
+        /* New tile fades + pops in */
+        @keyframes tileArrive {
+          0%   { opacity: 0;    transform: scale(0.40); }
+          55%  { opacity: 0.95; transform: scale(1.12); }
+          100% { opacity: 0.80; transform: scale(1.00); }
+        }
+
+        /* Outer halo: burst large → settle → hold → fade */
+        @keyframes mergedOuter {
+          0%   { opacity: 0;    transform: scale(0.30); }
+          7%   { opacity: 1.00; transform: scale(1.80); }
+          16%  { opacity: 0.88; transform: scale(1.40); }
+          72%  { opacity: 0.80; transform: scale(1.35); }
+          88%  { opacity: 0.30; transform: scale(1.25); }
+          100% { opacity: 0;    transform: scale(1.15); }
+        }
+
+        /* Inner core: burst slightly later → hold bright → fade */
+        @keyframes mergedInner {
+          0%   { opacity: 0;    transform: scale(0.20); }
+          10%  { opacity: 1.00; transform: scale(1.25); }
+          20%  { opacity: 0.92; transform: scale(1.00); }
+          72%  { opacity: 0.88; transform: scale(1.00); }
+          88%  { opacity: 0.38; transform: scale(0.95); }
+          100% { opacity: 0;    transform: scale(0.85); }
         }
       `}</style>
     </svg>
