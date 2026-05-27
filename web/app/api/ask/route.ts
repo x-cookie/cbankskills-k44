@@ -1,0 +1,47 @@
+import { NextRequest } from 'next/server'
+
+export const runtime = 'edge'
+
+export async function POST(req: NextRequest) {
+  const { messages, context } = await req.json()
+
+  const apiKey = process.env.OPENROUTER_API_KEY
+  if (!apiKey) {
+    return new Response(
+      JSON.stringify({ error: 'OPENROUTER_API_KEY not set' }),
+      { status: 500, headers: { 'Content-Type': 'application/json' } }
+    )
+  }
+
+  const upstream = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${apiKey}`,
+      'HTTP-Referer': 'https://cn-finance.vercel.app',
+      'X-Title': 'CN Finance',
+    },
+    body: JSON.stringify({
+      model: 'deepseek/deepseek-v4-flash',
+      stream: true,
+      messages: [
+        {
+          role: 'system',
+          content: `You are Claude, a financial AI assistant on CN Finance. You help users understand the "${context}" skill for financial services workflows. Be concise, expert, and practical. Match the language of the user's question.`,
+        },
+        ...messages,
+      ],
+    }),
+  })
+
+  if (!upstream.ok) {
+    return new Response(await upstream.text(), { status: upstream.status })
+  }
+
+  return new Response(upstream.body, {
+    headers: {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+    },
+  })
+}

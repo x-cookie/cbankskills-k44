@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { verticals } from "@/content/verticals";
 import PageHeader from "@/components/PageHeader";
+import AskClaude from "@/components/AskClaude";
 
 type Props = { params: { slug: string; skill: string } };
 
@@ -389,6 +390,8 @@ export default function SkillPage({ params }: Props) {
                 </p>
               </div>
             )}
+
+            <AskClaude vertical={v.slug} context={s.name} compact />
           </aside>
         </div>
       </div>

@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { verticals } from "@/content/verticals";
 import PageHeader from "@/components/PageHeader";
+import AskClaude from "@/components/AskClaude";
 
 type Props = { params: { slug: string } };
 
@@ -71,6 +72,8 @@ export default function VerticalPage({ params }: Props) {
           </div>
           <code style={{ fontFamily: "var(--font-mono)", fontSize: 13, color: "var(--accent)" }}>{v.installCommand}</code>
         </div>
+
+        <AskClaude vertical={v.slug} context={v.title} />
 
         {/* Skills grid */}
         <div style={{ marginBottom: 64 }}>
