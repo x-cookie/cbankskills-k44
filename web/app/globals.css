@@ -76,12 +76,7 @@ body {
   from { background-position: 0 0,     26px 14px; }
   to   { background-position: 52px 28px, 78px 42px; }
 }
-/* Cube float animations — different durations so they never sync */
-@keyframes cubeFloat1 { 0%,100%{transform:translateY(0)}    50%{transform:translateY(-9px)} }
-@keyframes cubeFloat2 { 0%,100%{transform:translateY(0)}    50%{transform:translateY(-6px)} }
-@keyframes cubeFloat3 { 0%,100%{transform:translateY(-3px)} 50%{transform:translateY(5px)}  }
-@keyframes cubeFloat4 { 0%,100%{transform:translateY(0)}    50%{transform:translateY(-7px)} }
-@keyframes cubeFloat5 { 0%,100%{transform:translateY(0)}    50%{transform:translateY(-5px)} }
+
 
 .hero-bg {
   background-color: #FFFFFF;

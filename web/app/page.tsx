@@ -160,41 +160,31 @@ export default function HomePage() {
               <linearGradient id="grite" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stopColor="#c0dccb" /><stop offset="100%" stopColor="#96c8ae" /></linearGradient>
             </defs>
 
-            {/* ── 3D isometric cubes — each wrapped for independent float ── */}
-            <g style={{ animation: "cubeFloat1 6.8s ease-in-out infinite" }}>
-              <g filter="url(#ds1)" transform="translate(300,55)">
-                <polygon points="65,0  130,38  65,76  0,38"  fill="url(#gtop)"  opacity="0.88" />
-                <polygon points="0,38  65,76  65,120 0,82"   fill="url(#gleft)" opacity="0.88" />
-                <polygon points="65,76 130,38 130,82 65,120" fill="url(#grite)" opacity="0.88" />
-              </g>
+            {/* ── 3D isometric cubes — static, level with grid ── */}
+            <g filter="url(#ds1)" transform="translate(300,55)">
+              <polygon points="65,0  130,38  65,76  0,38"  fill="url(#gtop)"  opacity="0.88" />
+              <polygon points="0,38  65,76  65,120 0,82"   fill="url(#gleft)" opacity="0.88" />
+              <polygon points="65,76 130,38 130,82 65,120" fill="url(#grite)" opacity="0.88" />
             </g>
-            <g style={{ animation: "cubeFloat2 5.3s ease-in-out -1.5s infinite" }}>
-              <g filter="url(#ds2)" transform="translate(360,220)">
-                <polygon points="46,0  92,27  46,54  0,27"  fill="url(#gtop)"  opacity="0.82" />
-                <polygon points="0,27  46,54  46,86  0,59"  fill="url(#gleft)" opacity="0.82" />
-                <polygon points="46,54 92,27 92,59 46,86"   fill="url(#grite)" opacity="0.82" />
-              </g>
+            <g filter="url(#ds2)" transform="translate(360,220)">
+              <polygon points="46,0  92,27  46,54  0,27"  fill="url(#gtop)"  opacity="0.82" />
+              <polygon points="0,27  46,54  46,86  0,59"  fill="url(#gleft)" opacity="0.82" />
+              <polygon points="46,54 92,27 92,59 46,86"   fill="url(#grite)" opacity="0.82" />
             </g>
-            <g style={{ animation: "cubeFloat3 7.5s ease-in-out -2.8s infinite" }}>
-              <g filter="url(#ds2)" transform="translate(210,320)">
-                <polygon points="36,0  72,21  36,42  0,21"  fill="url(#gtop)"  opacity="0.72" />
-                <polygon points="0,21  36,42  36,66  0,45"  fill="url(#gleft)" opacity="0.72" />
-                <polygon points="36,42 72,21 72,45 36,66"   fill="url(#grite)" opacity="0.72" />
-              </g>
+            <g filter="url(#ds2)" transform="translate(210,320)">
+              <polygon points="36,0  72,21  36,42  0,21"  fill="url(#gtop)"  opacity="0.72" />
+              <polygon points="0,21  36,42  36,66  0,45"  fill="url(#gleft)" opacity="0.72" />
+              <polygon points="36,42 72,21 72,45 36,66"   fill="url(#grite)" opacity="0.72" />
             </g>
-            <g style={{ animation: "cubeFloat4 4.8s ease-in-out -0.8s infinite" }}>
-              <g filter="url(#ds2)" transform="translate(454,140)">
-                <polygon points="28,0  56,16  28,32  0,16"  fill="url(#gtop)"  opacity="0.65" />
-                <polygon points="0,16  28,32  28,52  0,36"  fill="url(#gleft)" opacity="0.65" />
-                <polygon points="28,32 56,16 56,36 28,52"   fill="url(#grite)" opacity="0.65" />
-              </g>
+            <g filter="url(#ds2)" transform="translate(454,140)">
+              <polygon points="28,0  56,16  28,32  0,16"  fill="url(#gtop)"  opacity="0.65" />
+              <polygon points="0,16  28,32  28,52  0,36"  fill="url(#gleft)" opacity="0.65" />
+              <polygon points="28,32 56,16 56,36 28,52"   fill="url(#grite)" opacity="0.65" />
             </g>
-            <g style={{ animation: "cubeFloat5 8.2s ease-in-out -3.2s infinite" }}>
-              <g filter="url(#ds2)" transform="translate(165,175)">
-                <polygon points="40,0  80,23  40,46  0,23"  fill="url(#gtop)"  opacity="0.45" />
-                <polygon points="0,23  40,46  40,72  0,49"  fill="url(#gleft)" opacity="0.45" />
-                <polygon points="40,46 80,23 80,49 40,72"   fill="url(#grite)" opacity="0.45" />
-              </g>
+            <g filter="url(#ds2)" transform="translate(165,175)">
+              <polygon points="40,0  80,23  40,46  0,23"  fill="url(#gtop)"  opacity="0.45" />
+              <polygon points="0,23  40,46  40,72  0,49"  fill="url(#gleft)" opacity="0.45" />
+              <polygon points="40,46 80,23 80,49 40,72"   fill="url(#grite)" opacity="0.45" />
             </g>
 
             {/* ── Flat small tiles scattered around cubes ─── */}
