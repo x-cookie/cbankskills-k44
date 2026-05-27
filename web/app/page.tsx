@@ -3,6 +3,7 @@ import Link from "next/link";
 import Marquee from "@/components/Marquee";
 import TerminalDemo from "@/components/TerminalDemo";
 import ThreeSteps from "@/components/ThreeSteps";
+import HeroPingOverlay from "@/components/HeroPingOverlay";
 import { verticals } from "@/content/verticals";
 
 export const metadata: Metadata = {
@@ -51,6 +52,9 @@ export default function HomePage() {
           padding: "80px 48px",
         }}
       >
+        {/* Ping overlay — amber diamonds lighting up at grid positions */}
+        <HeroPingOverlay />
+
         {/* Radial fade */}
         <div
           style={{
