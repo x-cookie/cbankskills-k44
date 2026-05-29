@@ -204,6 +204,25 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ── CONTRACT ADDRESS ─────────────────────────────────── */}
+      <div style={{
+        background: "var(--text)",
+        borderBottom: "1px solid rgba(255,255,255,0.06)",
+        padding: "10px 48px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 16,
+      }}>
+        <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)" }}>
+          Contract Address
+        </span>
+        <span style={{ width: 1, height: 12, background: "rgba(255,255,255,0.12)", flexShrink: 0 }} />
+        <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, letterSpacing: "0.06em", color: "rgba(255,255,255,0.55)", userSelect: "all" }}>
+          DrTjHTKmYxR2VD5UYCJjeNqwkPEJ7v4Kmix1qxkZpump
+        </span>
+      </div>
+
       {/* ── MARQUEE ──────────────────────────────────────────── */}
       <Marquee />
 
